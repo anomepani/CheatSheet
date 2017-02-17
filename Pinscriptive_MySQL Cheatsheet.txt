@@ -1,0 +1,66 @@
+
+1. Delete query with join in MySQL
+Answer : DELETE a FROM `ALLERGY` a join avm_non_matched_patients p on a.PATIENT_ID_SYNTH=p.PATIENT_ID_SYNTH;
+
+** Reference links: http://stackoverflow.com/questions/15026368/mysql-delete-query-with-join
+DELETE FROM Test2
+WHERE Field2 IN (
+    SELECT Field2 
+    FROM Test1
+    WHERE Field1 = 22)
+
+2. Update bulk records based on matching criteria with where consition
+Answer: 
+
+Update IMS_LRX_AmbEMR_Dataset.IMS_HCV_PATIENTS 
+set GENOTYPE = (SELECT GENOTYPE FROM PATIENT_GENOTYPE_9k WHERE IMS_HCV_PATIENTS.PATIENT_ID_SYNTH = PATIENT_GENOTYPE_9k.PATIENT_ID_SYNTH)
+WHERE PATIENT_ID_SYNTH in (SELECT PATIENT_ID_SYNTH from PATIENT_GENOTYPE_9k);
+
+            SET SQL_SAFE_UPDATES=0;
+               UPDATE `PATIENT_MEDICATIONS` SET IDW_PATIENT_ID_SYNTH=(SELECT distinct IDW_PATIENT_ID_SYNTH FROM IMS_HCV_PATIENTS WHERE PATIENT_ID_SYNTH = PATIENT_MEDICATIONS.PATIENT_ID_SYNTH)
+               WHERE PATIENT_ID_SYNTH in (SELECT PATIENT_ID_SYNTH from IMS_HCV_PATIENTS)
+
+			   Solution: 
+
+update IMS_HCV_PATIENTS_TEMP a
+join Sahil_Predicted_Genotype b on a.PATIENT_ID_SYNTH = b.PATIENT_ID_SYNTH
+set a.GENOTYPE = b.GENOTYPE_PREDICTED
+
+			   
+3. Import one table from one database to another database with filter condition.
+Answer: 
+INSERT INTO IMS_LRX_AmbEMR_Dataset.ENCOUNTER 
+SELECT e.* from AmbEMR.ENCOUNTER e join IMS_LRX_AmbEMR_Dataset.avm_hepc_new_lrx_amb_patient a on a.PATIENT_ID_SYNTH=e.PATIENT_ID_SYNTH;
+
+4. To Prevent update on multiple rows workbench have specific which restrict user to update records, how to update multiple records from WorkBench ?
+Answer:
+SET SQL_SAFE_UPDATES=0;
+
+-- Execute above command and then run the query for update.
+
+5. When we import data from CSV sometimes '\r' character are is automatically added with value, How to remove this type or charcter from column value?
+Answer:
+
+Update IMS_LRX_AmbEMR_Dataset.IMS_HCV_PATIENTS 
+set GENOTYPE = REPLACE(GENOTYPE, "\r", "");
+
+6. How to import larger CSV file to MySQL from workbench?
+
+Answer :
+** Here is different type of sample example for importing larger or smaller CSV to MySQL
+** Things to remember -> Each CSV have distinct or same value  for `FIELDS TERMINATED BY`,`LINES TERMINATED BY`,`ENCLOSED BY`, `IGNORE LINES`
+**                    -> Based on that below script are written or created.    
+** You can also run this script from command line by wrapping these scripts in storec procedure or by executing in MySQL commandline
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\cpt_idws_intsct_lrxnewmeds.txt' INTO TABLE avm_hepc_lrx_new_temp FIELDS TERMINATED BY '|' ENCLOSED BY '"' LINES TERMINATED BY ',' IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\cpt_idws_intsct_lrxnewmeds.txt' INTO TABLE avm_final_patient_list_amb_lrx FIELDS TERMINATED BY '|' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\PATIENT_Final_PATIENT_ID_SYNTH_05_DEC.csv' INTO TABLE avm_final_patient_list_amb_lrx FIELDS TERMINATED BY '|' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 0 LINES;
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\pat9kpreds.csv' INTO TABLE PATIENT_GENOTYPE_9k FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 0 LINES;
+
+7. Remove unwanted space or character like '\r' from column
+REPLACE(GENOTYPE_PREDICTED, "\r",'')
+
+

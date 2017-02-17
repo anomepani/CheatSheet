@@ -1,0 +1,38 @@
+
+ ** Most fix is Regarding bubble chart
+
+ 1. Remove border from chart
+  chart: {
+               
+                plotBorderWidth: 0,
+               
+            },
+ 
+ 2. Hide Horizontal line and tick
+ 
+xAxis: {
+
+   lineWidth: 0,
+   minorGridLineWidth: 0,
+   lineColor: 'transparent',
+        
+   labels: {
+       enabled: false
+   },
+   minorTickLength: 0,
+   tickLength: 0
+}
+
+For the yAxis you'll also need:
+
+gridLineColor: 'transparent',
+				
+ 3. Add horizontal and vertical line with different dash type on both Axis when we hover
+ 
+Reference link : http://stackoverflow.com/questions/25148528/highchart-always-show-crosshair
+  crosshairs: {
+                    //dashStyle: 'solid',
+                    width:2,
+                    color:'#ef4823',
+                    dashStyle:'ShortDot'
+                }

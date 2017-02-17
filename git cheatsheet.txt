@@ -1,0 +1,26 @@
+***** git cheatsheet ******
+
+### Run app with specific commit from git repository
+1. Checkout specific commit from Branch
+Solution: Below commmand checkout current branch at Head Position to specific commit but it is not same branch
+git checkout c40f1ba
+
+2. Reset hard current branch with specific commit
+Solutiion: Below command reset current Branch position for local changes to specific commit
+git reset --hard 7f8b903 
+
+3. Checkout branch or switch branch 
+Solution: 
+git fetch && git checkout branch_name
+e.g.
+git fetch && git checkout IMS_Pinscriptive
+
+### Save current changes(Commit locally) when we need to take pull and conflict in file
+Solution:
+
+Step-1: First satch your current changes using below command which commit your current changes in local
+git stash
+Step-2: Then you can take pull from remote branch
+git fetch && git pull
+Step-3: Then apply your stash change which you have store at last position
+git stash apply

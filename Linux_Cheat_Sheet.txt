@@ -1,0 +1,25 @@
+1. View running node process command
+ sudo pidof node
+ sudo ps aux | grep node
+ sudo lsof -i:portno e.g. sudo lsof -i:4000
+ sudo pgrep node 
+ 
+2. View disk utilization command
+df -h
+du -h
+3.  Command for kill process
+sudo kill -9 PID
+ 
+sudo killall -9 PID
+
+4.  Save file in Vi Editor 
+
+Press ESC Key and then type :wq
+
+5. 	Quit without saving changes i.e. discard changes
+Press ESC Key and then type :q!
+6 .Overwrite to file called fileName (save as forcefully)
+Press ESC Key and then type :w!
+
+7. Find file or app path in linux
+whereis meteorx
