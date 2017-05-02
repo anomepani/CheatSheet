@@ -11,6 +11,12 @@ du -h
 sudo kill -9 PID
  
 sudo killall -9 PID
+3.a How to stop meteor app ?
+
+Reference : http://stackoverflow.com/questions/12238382/how-to-stop-meteor
+Reference: https://gist.github.com/light9/6870997
+kill -9 `ps ax | grep node | grep meteor | awk '{print $1}'`
+kill -9 `ps ax | grep mongo | awk '{print $1}'`
 
 4.  Save file in Vi Editor 
 
@@ -23,3 +29,202 @@ Press ESC Key and then type :w!
 
 7. Find file or app path in linux
 whereis meteorx
+
+8. Find Out What Ports Are Listening / Open On My Linux & FreeBSD Server
+
+Reference Link : https://www.cyberciti.biz/faq/how-do-i-find-out-what-ports-are-listeningopen-on-my-linuxfreebsd-server/
+
+netstat command to find open ports
+
+The syntax is:
+# netstat --listen
+
+OR
+# netstat -l
+
+o display open ports and established TCP connections, enter:
+$ netstat -vatn
+
+To display only open UDP ports try the following command:
+$ netstat -vaun
+
+If you want to see FQDN (full dns hostname), try removing the -n flag:
+$ netstat -vat
+
+FreeBSD/OS X Unix user try the following command:
+$ netstat -na | grep -i LISTEN
+$ netstat -f inet -na | grep -i LISTEN
+
+lsof Command Examples
+
+To display the list of open ports, enter:
+# lsof -i
+
+To display all open files, use:
+# lsof
+
+To display all open IPv4 network files in use by the process whose PID is 9255, use:
+# lsof -i 4 -a -p 9255
+
+Another example:
+# lsof -iTCP -sTCP:LISTEN
+
+A Note About FreeBSD Users
+
+You can use the sockstat command lists open Internet or UNIX domain sockets, enter:
+$ sockstat
+$ sockstat -l
+$ sockstat -4 -l
+$ sockstat -6 -l
+
+9. Common Vi / Vim File Savings Related Commands (ex mode)
+
+You need to press [Esc] key followed by the colon (:) before typing the following commands:
+
+Command	Description
+q	Quit
+q!	Quit without saving changes i.e. discard changes
+r fileName	Read data from file called fileName
+wq	Write and quit (save and exit)
+w fileName	Write to file called fileName (save as)
+w! fileName	Overwrite to file called fileName (save as forcefully)
+:u undo last changes
+Ctrl-R :Redo changes which were undone (undo the undos). Compare to . to repeat a previous change, at the current cursor position. Ctrl-R (hold down Ctrl and press r) will redo a previously undone change, wherever the change occurred.
+
+10.
+To Start Apache:
+sudo /etc/init.d/apache2 start
+
+To Stop Apache:
+sudo /etc/init.d/apache2 stop
+
+To Restart Apache:
+sudo /etc/init.d/apache restart
+
+To Start MySQL:
+sudo start mysql
+or
+ sudo service mysql start
+or
+
+(Note: Older Method)
+
+sudo /etc/init.d/mysql start
+To Stop MySQL:
+sudo stop mysql
+or
+
+sudo service mysql stop
+or 
+
+(Note: Older Method)
+
+sudo /etc/inid.d/mysql stop 
+ 
+To Restart MySQL:
+sudo restart mysql
+ or
+sudo service mysql restart
+or
+sudo /etc/init.d/mysql restart
+
+11. unzip bz2 in linux
+
+Try the following:
+
+bzip2 -d filename.bz2
+Note, that this command will not preserve original archive file.
+
+To preserve the original archive, add the -k option:
+
+bzip2 -dk filename.bz2
+
+12 .View running port in linux
+
+netstat -lntu
+
+
+13. bash: cannot create temp file for here-document: No space left on device / Intelisense is not working in linux or tab is not working
+Solution :
+Reference link : https://unix.stackexchange.com/questions/277387/bash-cannot-create-temp-file-for-here-document-no-space-left-on-device
+Reference link : https://askubuntu.com/questions/380238/how-to-clean-tmp
+
+
+Solution :
+The directory /tmp means temporary.
+
+This directory stores temporary data. You don't need to delete anything from it, the data contained in it gets deleted automatically after every reboot.
+
+Still if you want to delete the data present in it use
+
+sudo rm -r /tmp/*
+
+deleting from it won't cause any problem as these are temporary files.
+
+14. view directory permission in linux
+
+ls -l
+
+$ ls -ld directory
+
+-d, --directory
+    list directory entries instead of contents, and do not dereference symbolic links
+
+14. linux-command-shutdown-reboot-restart-system
+
+Reference link : http://www.binarytides.com/linux-command-shutdown-reboot-restart-system/
+
+ reboot command
+
+Next command is the reboot command. It can be used to shutdown or reboot linux.
+
+The following command will shutdown linux.
+
+# reboot -p
+The "p" options stands for poweroff.
+
+To reboot linux just call the reboot command directly without any options.
+
+# reboot
+This will perform a graceful shutdown and restart of the machine. This is what happens when you click restart from your menu.
+
+Reboot linux forcibly
+The following command will forcefully reboot the machine. This is similar to pressing the power button of the CPU. No shutdown takes place. The system will reset instantly.
+
+# reboot -f
+The man page explains it as follows
+
+
+
+15. how-to-remove-all-files-from-a-directory
+
+Solution: 
+rm /path/to/directory/*
+
+# rm /path/to/directory/*.*
+
+
+16. check-linux-disk-usage-of-files-and-directories
+
+1. To find out the disk usage summary of a /home/tecmint directory tree and each of its sub directories. Enter the command as:
+du  /home/tecmint
+2. Using “-h” option with “du” command provides results in “Human Readable Format“. Means you can see sizes in Bytes, Kilobytes, Megabytes, Gigabytes etc.
+du -h /home/tecmint
+3. To get the summary of a grand total disk usage size of an directory use the option “-s” as follows.
+du -sh /home/tecmint
+4. Using “-a” flag with “du” command displays the disk usage of all the files and directories.
+du -a /home/tecmint
+du -ah /home/tecmint
+du -k /home/tecmint
+du -m /home/tecmint
+du -mh /home/tecmint
+
+The “-c” flag provides a grand total usage disk space at the last line. If your directory taken 674MB space, then the last last two line of the output would be.
+
+du -ch /home/tecmint
+ The below command calculates and displays the disk usage of all files and directories, but excludes the files that matches given pattern. The below command excludes the “.txt” files while calculating the total size of diretory. So, this way you can exclude any file formats by using flag “-–exclude“. See the output there is no txt files entry.
+du -ah --exclude="*.txt" /home/tecmint
+
+Display the disk usage based on modification of time, use the flag “–time” as shown below.
+
+du -ha --time /home/tecmint
