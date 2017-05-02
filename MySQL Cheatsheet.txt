@@ -1,6 +1,6 @@
 
 1. Delete query with join in MySQL
-Answer : DELETE a FROM `ALLERGY` a join avm_non_matched_patients p on a.PATIENT_ID_SYNTH=p.PATIENT_ID_SYNTH;
+Answer : DELETE a FROM `ALLERGY` a join avm_non_matched_patients p on a.ID1=p.ID1;
 
 ** Reference links: http://stackoverflow.com/questions/15026368/mysql-delete-query-with-join
 DELETE FROM Test2
@@ -12,25 +12,25 @@ WHERE Field2 IN (
 2. Update bulk records based on matching criteria with where consition
 Answer: 
 
-Update IMS_LRX_AmbEMR_Dataset.IMS_HCV_PATIENTS 
-set GENOTYPE = (SELECT GENOTYPE FROM PATIENT_GENOTYPE_9k WHERE IMS_HCV_PATIENTS.PATIENT_ID_SYNTH = PATIENT_GENOTYPE_9k.PATIENT_ID_SYNTH)
-WHERE PATIENT_ID_SYNTH in (SELECT PATIENT_ID_SYNTH from PATIENT_GENOTYPE_9k);
+Update Dataset_NAME.Table_NAME1 
+set GENOTYPE = (SELECT GENOTYPE FROM table4 WHERE Table_NAME1.ID1 = table4.ID1)
+WHERE ID1 in (SELECT ID1 from table4);
 
             SET SQL_SAFE_UPDATES=0;
-               UPDATE `PATIENT_MEDICATIONS` SET IDW_PATIENT_ID_SYNTH=(SELECT distinct IDW_PATIENT_ID_SYNTH FROM IMS_HCV_PATIENTS WHERE PATIENT_ID_SYNTH = PATIENT_MEDICATIONS.PATIENT_ID_SYNTH)
-               WHERE PATIENT_ID_SYNTH in (SELECT PATIENT_ID_SYNTH from IMS_HCV_PATIENTS)
+               UPDATE `Table_NAME2` SET ID2=(SELECT distinct ID2 FROM Table_NAME1 WHERE ID1 = Table_NAME2.ID1)
+               WHERE ID1 in (SELECT ID1 from Table_NAME1)
 
 			   Solution: 
 
-update IMS_HCV_PATIENTS_TEMP a
-join Sahil_Predicted_Genotype b on a.PATIENT_ID_SYNTH = b.PATIENT_ID_SYNTH
-set a.GENOTYPE = b.GENOTYPE_PREDICTED
+update Table_NAME1_TEMP a
+join pred_table b on a.ID1 = b.ID1
+set a.column1 = b.column2
 
 			   
 3. Import one table from one database to another database with filter condition.
 Answer: 
-INSERT INTO IMS_LRX_AmbEMR_Dataset.ENCOUNTER 
-SELECT e.* from AmbEMR.ENCOUNTER e join IMS_LRX_AmbEMR_Dataset.avm_hepc_new_lrx_amb_patient a on a.PATIENT_ID_SYNTH=e.PATIENT_ID_SYNTH;
+INSERT INTO Dataset_NAME.Table_NAME3 
+SELECT e.* from Dataset_NAME2.Table_NAME4 e join Dataset_NAME.avm_hepc_new_lrx_amb_patient a on a.ID1=e.ID1;
 
 4. To Prevent update on multiple rows workbench have specific which restrict user to update records, how to update multiple records from WorkBench ?
 Answer:
@@ -41,7 +41,7 @@ SET SQL_SAFE_UPDATES=0;
 5. When we import data from CSV sometimes '\r' character are is automatically added with value, How to remove this type or charcter from column value?
 Answer:
 
-Update IMS_LRX_AmbEMR_Dataset.IMS_HCV_PATIENTS 
+Update Dataset_NAME.Table_NAME1 
 set GENOTYPE = REPLACE(GENOTYPE, "\r", "");
 
 6. How to import larger CSV file to MySQL from workbench?
@@ -56,11 +56,122 @@ LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\cpt_idws_intsct_lrxnewmed
 
 LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\cpt_idws_intsct_lrxnewmeds.txt' INTO TABLE avm_final_patient_list_amb_lrx FIELDS TERMINATED BY '|' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
-LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\PATIENT_Final_PATIENT_ID_SYNTH_05_DEC.csv' INTO TABLE avm_final_patient_list_amb_lrx FIELDS TERMINATED BY '|' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 0 LINES;
+LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\PATIENT_Final_ID1_05_DEC.csv' INTO TABLE avm_final_patient_list_amb_lrx FIELDS TERMINATED BY '|' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 0 LINES;
 
-LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\pat9kpreds.csv' INTO TABLE PATIENT_GENOTYPE_9k FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 0 LINES;
+LOAD DATA LOCAL INFILE 'C:\\Users\\BRADMIN\\Downloads\\pat9kpreds.csv' INTO TABLE table4 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 0 LINES;
 
 7. Remove unwanted space or character like '\r' from column
 REPLACE(GENOTYPE_PREDICTED, "\r",'')
 
+8. duplicating-a-mysql-table-indexes-and-data
+Answer: 
+Reference : http://stackoverflow.com/questions/3280006/duplicating-a-mysql-table-indexes-and-data
 
+-- To copy with indexes and triggers do these 2 queries:
+
+CREATE TABLE newtable LIKE oldtable; 
+INSERT newtable SELECT * FROM oldtable;
+--  To copy just structure and data use this one:
+
+CREATE TABLE tbl_new AS SELECT * FROM tbl_old;
+
+-- copy-a-mysql-table-including-indexes
+CREATE TABLE newtable LIKE oldtable; 
+INSERT newtable SELECT * FROM oldtable;
+
+CREATE TABLE BK_Table_NAME1_17_03_2017 LIKE Table_NAME1;
+INSERT BK_Table_NAME1_17_03_2017 SELECT * FROM Table_NAME1;
+
+9. How to rename table  in mysql
+
+RENAME TABLE  `oldTableName` TO  `newTableName`
+
+10. Search table/function/stored procedure from database ?
+
+SELECT 
+ * 
+FROM 
+ INFORMATION_SCHEMA.ROUTINES 
+WHERE 
+ ROUTINE_SCHEMA <> 'DB_NAME' AND
+ ROUTINE_DEFINITION LIKE '%CHARGE_MEDIAN%' 
+ORDER BY ROUTINE_NAME;
+
+11. How to delete binary logs in MySQL Server
+
+
+PURGE BINARY LOGS BEFORE '2017-04-30 00:06:00';
+
+
+
+
+12. how-can-i-import-a-database-with-mysql-from-terminal
+Assuming you're on a Linux or Windows console:
+
+Promp for password:
+
+mysql -u <username> -p <databasename> < <filename.sql>
+Enter password directly (not secure):
+
+mysql -u <username> -p<PlainPassword> <databasename> < <filename.sql>
+Example:
+
+mysql -u root -p wp_users < wp_users.sql
+
+mysql -u root -pPassword123 wp_users < wp_users.sql
+
+
+
+Reference link : http://stackoverflow.com/questions/17666249/how-to-import-an-sql-file-using-the-command-line-in-mysql
+
+
+ 13. *** Host 'xxx.xx.xxx.xxx' is not allowed to connect to this MySQL server ***
+ 
+ Reference link : http://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server
+ 
+ Dataset_NAME_SP_SCRIPTS.sql
+ 
+ 
+ 
+ 
+** IMPORT MYSQL DATABASE  USING COMMAND LINE**
+mysql -uroot -p leaderboard2  < /data/dumps/leaderboarddump.sql
+
+
+** Export MYSQL DATABASE  USING COMMAND LINE**
+mysql -uroot -p DB_NAME  < /path/file-name.sql
+
+ mysqldump -uroot -p leaderboard1 > /data/dumps/leaderboarddump.sql
+
+ *** How to take complete backup of mysql database using mysqldump command line utility ***
+ 
+ Reference link : http://stackoverflow.com/questions/1078196/how-to-take-complete-backup-of-mysql-database-using-mysqldump-command-line-utili
+ 
+ 
+ In case you want to take full backup i.e., all databases,procedures,routines,events without interrupting any connections.
+
+ mysqldump -u <username> -p -A -R -E --triggers --single-transaction > full_backup.sql
+-A- for all databases(also you can use --all-databases).
+-R - for all routines.
+-E - for all Events.
+--single-transaction - without locking the table i.e., without interrupting any connection(R/W).
+Incase you want to take backup of only on database(s).
+
+ mysqldump -u <username> -p <Database_Name1><database2> -R -e --triggers --single-transaction > Database_backup.sql
+Incase you want to take backup of a specific table in a database.
+
+ mysqldump -u <username> -p <database_name> <Table_name> > table_backup.sql
+Incase you want to take backup of a database structure only just add --no-data to the previous commands.
+
+mysqldump -u [username] –p[password] –-no-data [database_name] > [dump_file.sql]
+Likewise there are lot more options with this tool. FUrther information can be found in the following link--mysqldump information
+ 
+
+
+FINAL COMMAND For EXPORT :    mysqldump -uroot -p leaderboard1  -R -e --triggers --single-transaction > /data/dumps/leaderboarddump.sql
+
+FINAL COMMAND For IMPORT :  mysql -uroot -p leaderboard2  < /data/dumps/leaderboarddump.sql
+
+mysql -uroot -p DB_NAME  < /data/devdump/SCRIPT_NAME.sql
+
+mysql -uroot -p < /home/ec2-user/dbdumps/mysql-devims.20170501014501.sql
