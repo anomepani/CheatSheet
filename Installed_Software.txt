@@ -1,0 +1,82 @@
+    07-+++++++++++++++
+	0. Installed basic software
+  - VLC
+  - 7z  
+1. Installed Below Software related with developer
+  - Node js
+  - Choco/Choclately  - Need to explore more
+  - Yarn - Need to explore more
+      Please put the path of your project folder and global cache folder, which is `%Appdata%\local\Yarn` by default, in the whitelist of anti-virus software, including **Windows Defender**. Otherwise they would dramatically 
+      slow down your speed of installation by scanning each file while writing dependencies into your disk.
+  - Notepad++
+  - Meteor
+  - Mysql,Workbench, wampserver
+  - Python 3.4 
+  - Visual Studio code
+  - anaconda - Need to explore more
+  - Synced Two gmail accounts profile or bookmarks
+  - Vagrant - Need to explore more
+  - pm2-meteor - Need to explore more
+  - mup - Need to explore more
+------------------------------------------https://www.vagrantup.com/intro/index.html#why-vagrant------------------------------------------------------------------------------------
+  -> Vagrant is designed for everyone as the easiest and fastest way to create a virtualized environment!
+    -> Vagrant is a tool for building and managing virtual machine environments in a single workflow.
+     	  With an easy-to-use workflow and focus on automation, Vagrant lowers development environment setup time,
+		  increases production parity, and makes the "works on my machine" excuse a relic of the past.
+	 	  If you are already familiar with the basics of Vagrant, the documentation provides a better reference
+  		  build for all available features and internals.
+		Why Vagrant?
+
+        Vagrant provides easy to configure, reproducible, and portable work environments built on top of industry-standard
+		technology and controlled by a single consistent workflow to help maximize the productivity and flexibility of you
+		and your team.
+		
+		To achieve its magic, Vagrant stands on the shoulders of giants. Machines are provisioned on top of VirtualBox,
+		VMware, AWS, or any other provider. Then, industry-standard provisioning tools such as shell scripts, Chef, or
+		Puppet, can automatically install and configure software on the virtual machine.
+-----------------------------------------------------------------------------------------------------------------------------		
+  - Generated new Personel token on Github
+   token: db74c597c1e3a97583c457eb4759564e68d7038f
+   Sync : Upload Complete. 
+   GIST ID : 3696126a27555d9b7c6f57273e12aaf0 
+   Please copy and use this ID in other machines to download settings.
+  - Installed Cygwin linux terminal in windows fcr backgroud process or tmux or screen like command
+  
+  ----------------------FIND RUNNING NODE PROCESS ON Windows------------------
+  Another possibility I came up with, inspired by using grep, is:
+
+tasklist /FI "IMAGENAME eq myapp.exe" 2>NUL | find /I /N "myapp.exe">NUL
+if "%ERRORLEVEL%"=="0" echo Program is running
+It doesn't need to save an extra file, so I prefer this method.
+  
+  
+  ----------------KILL RUNNING NODE PROCESS in Windows ----------------------
+Note the PID corresponding to your node process, in this case 3592. Next run taskkill to terminate the process.
+
+  C:\> taskkill /F /PID 3592
+Or /IM switch
+
+  C:\> taskkill /F /IM node.exe
+  
+  
+  
+  
+  
+  ----------------KILL RUNNING NODE PROCESS in Windows ----------------------
+Windows Machine:
+
+Need to kill a Node.js server, and you don't have any other Node processes running, you can tell your machine to kill all processes named node.exe. That would look like this:
+
+taskkill /im node.exe
+And if the processes still persist, you can force the processes to terminate by adding the /f flag:
+
+taskkill /f /im node.exe
+If you need more fine-grained control and need to only kill a server that is running on a specific port, you can use netstat to find the process ID, then send a kill signal to it. So in your case, where the port is 8080, you could run the following:
+
+C:\>netstat -ano | find "LISTENING" | find "8080"
+The fifth column of the output is the process ID:
+
+  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       14828
+  TCP    [::]:8080              [::]:0                 LISTENING       14828
+You could then kill the process with taskkill /pid 14828. If the process refuses to exit, t
+hen just add the /f (force) parameter to the command.
